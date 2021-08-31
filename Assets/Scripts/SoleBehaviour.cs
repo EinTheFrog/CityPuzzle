@@ -7,20 +7,24 @@ public class SoleBehaviour : MonoBehaviour
     
     private Material _material = default;
     private Color _basicColor = default;
+    private BuildingManagerBehaviour _buildingManager = default;
     private void Start()
     {
         _material = gameObject.GetComponent<Renderer>().material;
         _basicColor = _material.color;
+        _buildingManager = FindObjectOfType<BuildingManagerBehaviour>();
     }
 
     private void OnMouseEnter()
     {
         _material.color = _basicColor + new Color(highlightingRatio, highlightingRatio, highlightingRatio, 0);
+        _buildingManager.SelectSole(this);
     }
     
     private void OnMouseExit()
     {
         _material.color = _basicColor;
+        _buildingManager.CancelSoleSelection();
     }
 
 
