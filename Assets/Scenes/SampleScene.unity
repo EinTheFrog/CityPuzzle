@@ -612,7 +612,7 @@ GameObject:
   - component: {fileID: 174668507}
   - component: {fileID: 174668506}
   m_Layer: 5
-  m_Name: PanelBottom
+  m_Name: Table
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4625,6 +4625,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1390541925831482447, guid: e9a9344f2741f9b448eb5b62ef553031, type: 3}
   m_PrefabInstance: {fileID: 1127513736}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1129020596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1129020597}
+  m_Layer: 0
+  m_Name: CardDeck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1129020597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129020596}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 185.73709, y: 207.19696, z: -54.25605}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1144651007
 Mesh:
   m_ObjectHideFlags: 0
@@ -7368,7 +7398,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8589970031510295154, guid: ad18ab0e58f63c843ba168c1f23ee561, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ad18ab0e58f63c843ba168c1f23ee561, type: 3}
 --- !u!1001 &2705901988157481138
 PrefabInstance:

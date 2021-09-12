@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 1127607323694360485}
   - component: {fileID: 1127607323694360486}
   - component: {fileID: 680413952}
+  - component: {fileID: 8589970031510295154}
   m_Layer: 5
-  m_Name: Card
+  m_Name: CardHouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 1f6b4e2d596e4074491d7b3ce7c70f6a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -88,3 +89,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d201b980dc2ad045bad5c13a0d7303a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &8589970031510295154
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127607323694360504}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

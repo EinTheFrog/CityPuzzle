@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -8,12 +9,15 @@ using Image = UnityEngine.UI.Image;
 
 public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+    [SerializeField] private readonly string TableTag = "Table";
+    
     private BuildingManagerBehaviour _buildingManager = default;
     private Image _image = default;
     private void Start()
     {
         _buildingManager = FindObjectOfType<BuildingManagerBehaviour>();
         _image = GetComponent<Image>();
+        var table = GameObject.FindGameObjectWithTag(TableTag).GetComponent<RectTransform>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -37,5 +41,10 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void UseCard()
     {
         Destroy(this);
+    }
+
+    public void DragToTable()
+    {
+        
     }
 }
