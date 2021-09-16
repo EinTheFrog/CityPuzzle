@@ -9,15 +9,23 @@ using Image = UnityEngine.UI.Image;
 
 public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] private readonly string TableTag = "Table";
-    
     private BuildingManagerBehaviour _buildingManager = default;
     private Image _image = default;
+    private bool _freeToDrag = false;
+    private Vector2 _dragDestination = default;
+    private float _speed = 0f;
     private void Start()
     {
         _buildingManager = FindObjectOfType<BuildingManagerBehaviour>();
         _image = GetComponent<Image>();
-        var table = GameObject.FindGameObjectWithTag(TableTag).GetComponent<RectTransform>();
+    }
+
+    private void Update()
+    {
+        if (_freeToDrag)
+        {
+            DragUpdate();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -28,7 +36,7 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = eventData.position;
-        var y = transform.localPosition.y;
+        var y = transform.position.y;
         var alpha = Mathf.Clamp(1 - y / 200, 0.2f, 1f);
         _image.color = new Color(1, 1, 1, alpha);
     }
@@ -42,9 +50,22 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     {
         Destroy(this);
     }
-
-    public void DragToTable()
+    
+    public void DragTo(Vector2 dest, float speed)
     {
-        
+        _freeToDrag = true;
+        _dragDestination = dest;
+        _speed = speed;
+    }
+
+    private void DragUpdate()
+    {
+        var pos = new Vector2(transform.position.x, transform.position.y);
+        var path = _dragDestination - pos;
+        if (path.magnitude < _speed * Time.deltaTime) return;
+
+        var direction = path.normalized;
+        var d = new Vector3(direction.x, direction.y, 0) * Time.deltaTime;
+        transform.position += d;
     }
 }
