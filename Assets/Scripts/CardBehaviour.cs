@@ -13,7 +13,11 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private Image _image = default;
     private bool _freeToDrag = false;
     private Vector2 _dragDestination = default;
-    private float _speed = 0f;
+
+    public float Speed { get; set; }
+    public delegate Vector2 DragDestDel(CardBehaviour card);
+
+    public DragDestDel GetDragDest;
     private void Start()
     {
         _buildingManager = FindObjectOfType<BuildingManagerBehaviour>();
@@ -43,6 +47,8 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        var dragDest = GetDragDest(this);
+        DragTo(dragDest);
         _buildingManager.TryToUseCard();
     }
 
@@ -51,21 +57,24 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         Destroy(this);
     }
     
-    public void DragTo(Vector2 dest, float speed)
+    public void DragTo(Vector2 dest)
     {
         _freeToDrag = true;
         _dragDestination = dest;
-        _speed = speed;
     }
 
     private void DragUpdate()
     {
-        var pos = new Vector2(transform.position.x, transform.position.y);
+        var pos = new Vector2(transform.localPosition.x, transform.localPosition.y);
         var path = _dragDestination - pos;
-        if (path.magnitude < _speed * Time.deltaTime) return;
+        if (path.magnitude < Speed * Time.deltaTime)
+        {
+            _freeToDrag = false;
+            return;
+        }
 
         var direction = path.normalized;
-        var d = new Vector3(direction.x, direction.y, 0) * Time.deltaTime;
+        var d = new Vector3(direction.x, direction.y, 0) * Time.deltaTime * Speed;
         transform.position += d;
     }
 }

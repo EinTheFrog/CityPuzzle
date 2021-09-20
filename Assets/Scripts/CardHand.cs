@@ -3,7 +3,8 @@
 public class CardHand
 {
     private CardBehaviour[] _cards;
-    private int _currentSize = 0;
+
+    public int CurrentSize { private set; get; }
 
     public CardHand(int size)
     {
@@ -12,9 +13,9 @@ public class CardHand
 
     public bool Add(CardBehaviour newCard)
     {
-        if (_currentSize == _cards.Length) return false;
-        _cards[_currentSize] = newCard;
-        _currentSize++;
+        if (CurrentSize == _cards.Length) return false;
+        _cards[CurrentSize] = newCard;
+        CurrentSize++;
         return true;
     }
 
@@ -27,7 +28,7 @@ public class CardHand
         }
         _cards[_cards.Length - 1] = null;
         
-        _currentSize--;
+        CurrentSize--;
     }
 
     private int GetCardPos(CardBehaviour card)
