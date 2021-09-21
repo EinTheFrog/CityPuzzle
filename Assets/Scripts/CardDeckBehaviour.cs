@@ -34,7 +34,6 @@ public class CardDeckBehaviour : MonoBehaviour
         
         GetTableParameters();
         _cardWidth = cardDeck[0].GetComponent<RectTransform>().rect.width;
-        SpawnCards();
     }
 
     private void GetTableParameters()
@@ -43,48 +42,66 @@ public class CardDeckBehaviour : MonoBehaviour
         var tableRect = _table.rect;
         _tableCenter = tableRect.center;
         _tableWidth = tableRect.width;
-        _cardSpawnPos = new Vector3(tableRect.xMax, tableRect.yMax, 0);
+        _cardSpawnPos = new Vector3(tableRect.xMax + 100, _tableCenter.y, 0);
     }
 
-    private void SpawnCards()
+    public void SpawnCards()
     {
         int rnd = 0;
         for (int i = 0; i < cardsPerSpawn; i++)
         {
             rnd = Random.Range(0, cardDeck.Length);
             var card = Instantiate(cardDeck[rnd]);
-            
-            card.GetDragDest = GetCardDragDest;
-            card.Speed = cardSpeed;
-            var cardTransform = card.transform;
-            cardTransform.parent = _table.transform;
-            cardTransform.localPosition = _cardSpawnPos;
-            
-            _cardHand.Add(card);
+            var handIsFull = !_cardHand.Add(card);
+            if (handIsFull)
+            {
+                Destroy(card.gameObject);
+                break;
+            }
+            SetCardParameters(card);
         }
+        CalculateSpaceBetweenCards();
+        UpdateCardsPos();
+    }
 
+    private void SetCardParameters(CardBehaviour card)
+    {
+        card.GetDragDest = GetCardDragDest;
+        card.Speed = cardSpeed;
+        var cardTransform = card.transform;
+        cardTransform.SetParent(_table);
+        cardTransform.localPosition = _cardSpawnPos;
+    }
+
+    private void CalculateSpaceBetweenCards()
+    {
         var cardsWidthSum = _cardHand.CurrentSize * _cardWidth;
         var tableAvailableWidth = _tableWidth - 2 * tableBorderOffset;
         _spaceBetweenCards = cardsWidthSum * spaceBetweenCards > tableAvailableWidth
             ? tableAvailableWidth / cardsWidthSum
             : spaceBetweenCards;
-
-        for (int i = 0; i < _cardHand.CurrentSize; i++)
-        {
-            _cardHand.Get(i).DragTo(CalculateCardDest(i));
-        }
     }
 
-    private void AddCardToHand(CardBehaviour card)
+    public void AddCardToHand(CardBehaviour card)
     {
         _cardHand.Add(card);
     }
 
-    private void RemoveCardFromHand(CardBehaviour card)
+    public void RemoveCardFromHand(CardBehaviour card)
     {
         _cardHand.Remove(card);
+        UpdateCardsPos();
     }
-    
+
+    private void UpdateCardsPos()
+    {
+        for (int i = 0; i < handSize; i++)
+        {
+            var card = _cardHand.Get(i);
+            if (card == null) break;
+            card.DragTo(CalculateCardDest(i));
+        }
+    }
 
     private Vector2 GetCardDragDest(CardBehaviour card)
     {

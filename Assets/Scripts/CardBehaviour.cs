@@ -9,6 +9,9 @@ using Image = UnityEngine.UI.Image;
 
 public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+    private const float InertiaMultiplier = 0.4f; //handpicked value
+    private const float TransparencyDenominator = 100f; //handpicked value
+    
     private BuildingManagerBehaviour _buildingManager = default;
     private Image _image = default;
     private bool _freeToDrag = false;
@@ -39,22 +42,26 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     
     public void OnDrag(PointerEventData eventData)
     {
+        _freeToDrag = false;
         transform.position = eventData.position;
-        var y = transform.position.y;
-        var alpha = Mathf.Clamp(1 - y / 200, 0.2f, 1f);
+        CalculateAlpha();
+    }
+
+    private void CalculateAlpha()
+    {
+        var y = transform.localPosition.y;
+        var dragDest = GetDragDest(this);
+        var dy = Mathf.Clamp(y - dragDest.y, 0, TransparencyDenominator);
+        var alpha = Mathf.Clamp(1 - dy / TransparencyDenominator, 0.2f, 1f);
         _image.color = new Color(1, 1, 1, alpha);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        _image.color = new Color(1, 1, 1, 1);
         var dragDest = GetDragDest(this);
         DragTo(dragDest);
         _buildingManager.TryToUseCard();
-    }
-
-    private void UseCard()
-    {
-        Destroy(this);
     }
     
     public void DragTo(Vector2 dest)
@@ -65,16 +72,19 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     private void DragUpdate()
     {
-        var pos = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        var localPas = transform.localPosition;
+        var pos = new Vector2(localPas.x, localPas.y);
         var path = _dragDestination - pos;
-        if (path.magnitude < Speed * Time.deltaTime)
+        var pathLength = path.magnitude;
+        if (pathLength < Speed * Time.deltaTime)
         {
             _freeToDrag = false;
             return;
         }
-
+        
         var direction = path.normalized;
-        var d = new Vector3(direction.x, direction.y, 0) * Time.deltaTime * Speed;
+        var speedMultiplier = Mathf.Clamp(pathLength / (Speed * InertiaMultiplier), 0.1f, 3f);
+        var d = new Vector3(direction.x, direction.y, 0) * Time.deltaTime * Speed * speedMultiplier;
         transform.position += d;
     }
 }
