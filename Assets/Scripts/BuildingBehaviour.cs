@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HouseBehaviour : MonoBehaviour
+public class BuildingBehaviour : MonoBehaviour
 {
     public void OnDrawGizmos()
     {

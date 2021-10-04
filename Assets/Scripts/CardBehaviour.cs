@@ -9,6 +9,8 @@ using Image = UnityEngine.UI.Image;
 
 public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+    public BuildingBehaviour building;
+    
     private const float InertiaMultiplier = 0.4f; //handpicked value
     private const float TransparencyDenominator = 100f; //handpicked value
     

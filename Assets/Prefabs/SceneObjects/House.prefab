@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7121834687909231304}
   - component: {fileID: 7593185891707533738}
   - component: {fileID: 4616977217117014689}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,6 +286,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5627882037033107021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a59107d4b9259004fa34b4a04b1cd816, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
