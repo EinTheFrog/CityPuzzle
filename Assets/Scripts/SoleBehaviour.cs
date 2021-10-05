@@ -4,6 +4,8 @@ using UnityEngine;
 public class SoleBehaviour : MonoBehaviour
 {
     [SerializeField] private float highlightingRatio = default;
+
+    public bool IsOccupied { get; private set; } = false;
     
     private Material _material = default;
     private Color _basicColor = default;
@@ -43,5 +45,10 @@ public class SoleBehaviour : MonoBehaviour
             Mathf.Round(localPosition.z)
         );
         transform.localPosition = localPosition;
+    }
+
+    public void Occupy()
+    {
+        IsOccupied = true;
     }
 }

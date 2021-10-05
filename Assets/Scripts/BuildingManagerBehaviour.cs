@@ -46,24 +46,37 @@ public class BuildingManagerBehaviour : MonoBehaviour
     public void TryToUseCard()
     {
         if (Card == null || Sole == null) return;
-        _cardDeckBehaviour.RemoveCardFromHand(Card);
-        BuildBuilding(Card.building);
-        Destroy(Card.gameObject);
+        var buildingWasBuilt = BuildBuilding(Card.building);
+        if (buildingWasBuilt)
+        {
+            _cardDeckBehaviour.RemoveCardFromHand(Card);
+            Destroy(Card.gameObject);
+        }
         CancelCardSelection();
         CancelSoleSelection();
     }
 
-    private void BuildBuilding(BuildingBehaviour building)
+    private bool BuildBuilding(BuildingBehaviour building)
     {
+        if (Sole.IsOccupied) return false;
+        
         var buildingGameObj = Instantiate(building);
-        var buildingTransform = buildingGameObj.transform;
+        PutBuildingOnSole(buildingGameObj, Sole);
+        
+        Sole.Occupy();
+        return true;
+    }
+
+    private void PutBuildingOnSole(BuildingBehaviour building, SoleBehaviour sole)
+    {
+        var buildingTransform = building.transform;
         buildingTransform.SetParent(_buildingParentTransform);
-        var soleTransform = Sole.transform;
+        var soleTransform = sole.transform;
         var soleScale = soleTransform.localScale;
-        var soleBounds = Sole.GetComponent<Renderer>().bounds;
+        var soleBounds = sole.GetComponent<Renderer>().bounds;
         var soleHeight = soleBounds.max.y * soleScale.y;
-        var soleWidth = (soleBounds.max.x - soleBounds.min.x) * soleScale.x;
-        buildingTransform.localPosition = soleTransform.localPosition + soleHeight * Vector3.up - soleWidth * Vector3.forward;
+        var posCorrection = soleHeight * Vector3.up;
+        buildingTransform.localPosition = soleTransform.localPosition + posCorrection;
         buildingTransform.localRotation = new Quaternion(0, 0, 0, 0);
     }
 }
