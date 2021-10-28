@@ -11,8 +11,8 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 {
     public BuildingBehaviour building;
     
-    private const float InertiaMultiplier = 0.4f; //handpicked value
-    private const float TransparencyDenominator = 100f; //handpicked value
+    private const float InertiaMultiplier = 0.4f; // Handpicked value
+    private const float TransparencyDenominator = 100f; // Handpicked value
     
     private BuildingManagerBehaviour _buildingManager = default;
     private Image _image = default;

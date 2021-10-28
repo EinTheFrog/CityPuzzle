@@ -18,12 +18,16 @@ public class BuildingManagerBehaviour : MonoBehaviour
     private Transform _buildingParentTransform;
     private BuildingBehaviour _ghost;
     private SoleBehaviour[] _soles;
+    private List<BuildingBehaviour> _builtBuildings;
+    private List<BuildingBehaviour> _buildingsForEarning;
 
     private void Start()
     {
         _cardDeckBehaviour = FindObjectOfType<CardDeckBehaviour>();
         _buildingParentTransform = GameObject.FindWithTag(buildingParentTag).transform;
         _soles = FindObjectsOfType<SoleBehaviour>();
+        _builtBuildings = new List<BuildingBehaviour>();
+        _buildingsForEarning = new List<BuildingBehaviour>();
     }
 
     public void SelectSole(SoleBehaviour sole)
@@ -118,6 +122,9 @@ public class BuildingManagerBehaviour : MonoBehaviour
         PutBuildingOnSole(buildingInstance.gameObject, Sole.gameObject);
 
         Sole.Occupy();
+        // Adding callback
+        buildingInstance.underBuildingEvent = AddBuildingForEarning;
+        _builtBuildings.Add(buildingInstance);
         return true;
     }
 
@@ -132,5 +139,10 @@ public class BuildingManagerBehaviour : MonoBehaviour
         var posCorrection = soleHeight * Vector3.up;
         buildingTransform.localPosition = soleTransform.localPosition + posCorrection;
         buildingTransform.localRotation = new Quaternion(0, 0, 0, 0);
+    }
+
+    public void AddBuildingForEarning(BuildingBehaviour building)
+    {
+        _buildingsForEarning.Add(building);
     }
 }
