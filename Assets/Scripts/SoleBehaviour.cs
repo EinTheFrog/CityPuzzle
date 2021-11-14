@@ -5,13 +5,14 @@ public class SoleBehaviour : MonoBehaviour
 {
     [SerializeField] private float highlightingRatio = default;
 
-    public bool IsOccupied { get; private set; } = false;
-    public bool UnderHouse { get; set; } = false;
+    public bool IsOccupied => _building != null;
+    public bool UnderGhost { get; set; } = false;
     
     private Material _material = default;
     private Color _basicColor = default;
     private BuildingManagerBehaviour _buildingManager = default;
     private bool _underMouse = false;
+    private BuildingBehaviour _building;
     private void Start()
     {
         _material = gameObject.GetComponent<Renderer>().material;
@@ -29,7 +30,7 @@ public class SoleBehaviour : MonoBehaviour
     private void OnMouseExit()
     {
         _underMouse = false;
-        if (UnderHouse)
+        if (UnderGhost)
         {
             Highlight();
         }
@@ -39,10 +40,18 @@ public class SoleBehaviour : MonoBehaviour
     {
         if (_underMouse) return;
         _material.color = _basicColor + new Color(highlightingRatio, highlightingRatio, highlightingRatio, 0);
+        if (IsOccupied)
+        {
+            _building.Highlight(true);
+        }
     }
 
     public void RestoreColor()
     {
+        if (IsOccupied)
+        {
+            _building.Highlight(false);
+        }
         _material.color = _basicColor;
     }
 
@@ -63,20 +72,20 @@ public class SoleBehaviour : MonoBehaviour
         transform.localPosition = localPosition;
     }
 
-    public void Occupy()
+    public void Occupy(BuildingBehaviour building)
     {
-        IsOccupied = true;
+        _building = building;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        UnderHouse = true;
+        UnderGhost = true;
         Highlight();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        UnderHouse = false;
+        UnderGhost = false;
         RestoreColor();
     }
 }

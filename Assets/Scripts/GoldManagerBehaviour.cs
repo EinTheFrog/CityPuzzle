@@ -21,6 +21,7 @@ public class GoldManagerBehaviour : MonoBehaviour
             throw new Exception("Gold count must be greater than zero");
         }
         _gold += count;
+        goldText.text = _gold.ToString();
     }
     
     public void SpendGold(int count)
@@ -35,5 +36,6 @@ public class GoldManagerBehaviour : MonoBehaviour
         {
             _gold = 0;
         }
+        goldText.text = _gold.ToString();
     }
 }

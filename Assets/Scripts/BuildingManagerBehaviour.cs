@@ -8,7 +8,8 @@ using Vector3 = UnityEngine.Vector3;
 
 public class BuildingManagerBehaviour : MonoBehaviour
 {
-    [SerializeField] private string buildingParentTag; 
+    [SerializeField] private string buildingParentTag = default;
+    [SerializeField] private GoldManagerBehaviour goldManager = default;
     public SoleBehaviour Sole { get; private set; }
     public CardBehaviour Card { get; private set; }
 
@@ -19,7 +20,6 @@ public class BuildingManagerBehaviour : MonoBehaviour
     private BuildingBehaviour _ghost;
     private SoleBehaviour[] _soles;
     private List<BuildingBehaviour> _builtBuildings;
-    private List<BuildingBehaviour> _buildingsForEarning;
 
     private void Start()
     {
@@ -27,7 +27,6 @@ public class BuildingManagerBehaviour : MonoBehaviour
         _buildingParentTransform = GameObject.FindWithTag(buildingParentTag).transform;
         _soles = FindObjectsOfType<SoleBehaviour>();
         _builtBuildings = new List<BuildingBehaviour>();
-        _buildingsForEarning = new List<BuildingBehaviour>();
     }
 
     public void SelectSole(SoleBehaviour sole)
@@ -80,6 +79,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
     {
         _ghost = Instantiate(building);
         _ghost.GetComponentInChildren<MeshRenderer>().enabled = false;
+        _ghost.GetComponentInChildren<SpriteRenderer>().enabled = false;
         _ghost.gameObject.SetActive(false);
     }
 
@@ -109,21 +109,20 @@ public class BuildingManagerBehaviour : MonoBehaviour
         for (int i = 0; i < _soles.Length; i++)
         {
             _soles[i].RestoreColor();
-            _soles[i].UnderHouse = false;
+            _soles[i].UnderGhost = false;
         }
     }
 
     private bool BuildBuilding(BuildingBehaviour building)
     {
         if (Sole.IsOccupied) return false;
+
+        EarnGoldForBuilding(building);
         
         var buildingInstance = Instantiate(building);
-        buildingInstance.GetComponentInChildren<BoxCollider>().enabled = false;
+        buildingInstance.Initialize();
         PutBuildingOnSole(buildingInstance.gameObject, Sole.gameObject);
-
-        Sole.Occupy();
-        // Adding callback
-        buildingInstance.underBuildingEvent = AddBuildingForEarning;
+        Sole.Occupy(buildingInstance);
         _builtBuildings.Add(buildingInstance);
         return true;
     }
@@ -141,8 +140,33 @@ public class BuildingManagerBehaviour : MonoBehaviour
         buildingTransform.localRotation = new Quaternion(0, 0, 0, 0);
     }
 
-    public void AddBuildingForEarning(BuildingBehaviour building)
+    private void EarnGoldForBuilding(BuildingBehaviour earnBuilding)
     {
-        _buildingsForEarning.Add(building);
+        var gold = 0;
+        foreach (var building in _builtBuildings)
+        {
+            if (building.UnderGhost)
+            {
+                gold += findValueInSIArray(building.GoldForBuildings, earnBuilding.BuildingName);
+            }
+        }
+
+        if (gold > 0)
+        {
+            goldManager.EarnGold(gold);
+        }
+    }
+
+    private int findValueInSIArray(StringInt[] stringInts, string key)
+    {
+        foreach (var pair in stringInts)
+        {
+            if (pair.key == key)
+            {
+                return pair.value;
+            }
+        }
+
+        return 0;
     }
 }
