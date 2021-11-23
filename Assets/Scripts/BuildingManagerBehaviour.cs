@@ -75,6 +75,11 @@ public class BuildingManagerBehaviour : MonoBehaviour
         CancelSoleSelection();
     }
 
+    public void ClearHand()
+    {
+        
+    }
+
     private void SpawnGhost(BuildingBehaviour building)
     {
         _ghost = Instantiate(building);
@@ -85,6 +90,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
 
     private void DestroyGhost()
     {
+        if (_ghost == null) return;
         Destroy(_ghost.gameObject);
         _ghost = null;
         RestoreSolesColor();
@@ -147,7 +153,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
         {
             if (building.UnderGhost)
             {
-                gold += findValueInSIArray(building.GoldForBuildings, earnBuilding.BuildingName);
+                gold += FindValueInSIArray(building.GoldForBuildings, earnBuilding.BuildingName);
             }
         }
 
@@ -157,7 +163,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
         }
     }
 
-    private int findValueInSIArray(StringInt[] stringInts, string key)
+    private int FindValueInSIArray(StringInt[] stringInts, string key)
     {
         foreach (var pair in stringInts)
         {
@@ -168,5 +174,25 @@ public class BuildingManagerBehaviour : MonoBehaviour
         }
 
         return 0;
+    }
+
+    public void DestroyAllBuildings()
+    {
+        foreach (var building in _builtBuildings)
+        {
+            Destroy(building.gameObject);
+        }
+        _builtBuildings.Clear();
+        DestroyGhost();
+        FreeSoles();
+    }
+    
+    private void FreeSoles()
+    {
+        var soles = GetComponentsInChildren<SoleBehaviour>();
+        foreach (var sole in soles)
+        {
+            sole.Free();
+        }
     }
 }

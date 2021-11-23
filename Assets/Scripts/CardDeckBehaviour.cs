@@ -82,15 +82,23 @@ public class CardDeckBehaviour : MonoBehaviour
             : spaceBetweenCards;
     }
 
-    public void AddCardToHand(CardBehaviour card)
-    {
-        _cardHand.Add(card);
-    }
-
     public void RemoveCardFromHand(CardBehaviour card)
     {
         _cardHand.Remove(card);
         UpdateCardsPos();
+    }
+
+    public void ClearHand()
+    {
+        for (int i = 0; i < handSize; i++)
+        {
+            var card = _cardHand.Get(i);
+            if (card != null)
+            {
+                Destroy(card.gameObject);
+            }
+        }
+        _cardHand.Clear();
     }
 
     private void UpdateCardsPos()

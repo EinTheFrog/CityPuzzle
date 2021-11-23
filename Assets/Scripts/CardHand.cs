@@ -56,4 +56,14 @@ public class CardHand
     {
         return _cards[pos];
     }
+
+    public void Clear()
+    {
+        for (int i = 0; i < _cards.Length; i++)
+        {
+            _cards[i] = null;
+        }
+
+        CurrentSize = 0;
+    }
 }

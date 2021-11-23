@@ -77,6 +77,11 @@ public class SoleBehaviour : MonoBehaviour
         _building = building;
     }
 
+    public void Free()
+    {
+        _building = null;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         UnderGhost = true;

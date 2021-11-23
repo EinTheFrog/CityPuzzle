@@ -12,7 +12,7 @@ public class BuildingBehaviour : MonoBehaviour
     public bool UnderGhost { get; private set; } = false;
 
     private SpriteRenderer _sprite;
-    private Transform _cameraTranform;
+    private Transform _cameraTransform;
 
     public void OnDrawGizmos()
     {
@@ -24,7 +24,7 @@ public class BuildingBehaviour : MonoBehaviour
         _sprite = GetComponentInChildren<SpriteRenderer>();
         _sprite.enabled = false;
         GetComponentInChildren<BoxCollider>().enabled = false;
-        _cameraTranform = FindObjectOfType<Camera>().transform;
+        _cameraTransform = FindObjectOfType<Camera>().transform;
     }
 
     private void AlignPosition()
@@ -42,7 +42,7 @@ public class BuildingBehaviour : MonoBehaviour
     public void Highlight(bool b)
     {
         var spriteTrans = _sprite.transform;
-        spriteTrans.LookAt(_cameraTranform);
+        spriteTrans.LookAt(_cameraTransform);
         spriteTrans.eulerAngles = RoundRotation(spriteTrans.eulerAngles);
         _sprite.enabled = b;
 
