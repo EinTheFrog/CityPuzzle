@@ -39,14 +39,29 @@ public class BuildingBehaviour : MonoBehaviour
         transform.localPosition = localPosition;
     }
 
-    public void Highlight(bool b)
+    public void Highlight(bool b, string ghostType)
     {
         var spriteTrans = _sprite.transform;
         spriteTrans.LookAt(_cameraTransform);
         spriteTrans.eulerAngles = RoundRotation(spriteTrans.eulerAngles);
-        _sprite.enabled = b;
+        
+        var haveProfit = CheckGhostTypeInList(ghostType);
+        _sprite.enabled = b & haveProfit;
 
         UnderGhost = b;
+    }
+
+    private bool CheckGhostTypeInList(string ghostType)
+    {
+        foreach (var pair in goldForBuildings)
+        {
+            if (pair.key == ghostType)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Vector3 RoundRotation(Vector3 oldRot)

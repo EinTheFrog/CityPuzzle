@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 7990420612038797896}
   - component: {fileID: 7606804501646974076}
   m_Layer: 0
-  m_Name: House
+  m_Name: Church
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,10 +169,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: House
+  buildingName: Church
   goldForBuildings:
-  - key: House
-    value: 10
+  - key: Graveyard
+    value: 15
+  - key: Barraks
+    value: -5
 --- !u!1 &8465062611184197515
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,9 +269,8 @@ GameObject:
   - component: {fileID: 6884651769909437026}
   - component: {fileID: 6937105321301365043}
   - component: {fileID: 845704260686994668}
-  - component: {fileID: 1667935809142838102}
   m_Layer: 2
-  m_Name: HouseModel
+  m_Name: ChurchModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -516,18 +517,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9196685331407086350}
-  m_Mesh: {fileID: 0}
---- !u!64 &1667935809142838102
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9196685331407086350}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
