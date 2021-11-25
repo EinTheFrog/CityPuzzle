@@ -156,7 +156,6 @@ public class BuildingManagerBehaviour : MonoBehaviour
         {
             goldManager.EarnGold(gold);
         }
-
         if (gold < 0)
         {
             goldManager.SpendGold(Mathf.Abs(gold));

@@ -88,4 +88,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d201b980dc2ad045bad5c13a0d7303a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frequency: 0
   building: {fileID: 7606804501646974076, guid: 7b61619f401108b4d97fbae815e913d0, type: 3}

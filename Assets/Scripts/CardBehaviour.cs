@@ -4,6 +4,8 @@ using Image = UnityEngine.UI.Image;
 
 public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+    [SerializeField] private int frequency = 0;
+    
     public BuildingBehaviour building;
     
     private const float InertiaMultiplier = 0.4f; // Handpicked value
@@ -15,6 +17,7 @@ public class CardBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private Vector2 _dragDestination = default;
 
     public float Speed { get; set; }
+    public int Frequency => frequency;
     public delegate Vector2 DragDestDel(CardBehaviour card);
 
     public DragDestDel GetDragDest;

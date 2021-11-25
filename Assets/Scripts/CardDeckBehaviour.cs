@@ -17,6 +17,7 @@ public class CardDeckBehaviour : MonoBehaviour
     [SerializeField] [Range(0, 1.5f)] private float spaceBetweenCards = 0.5f;
     [SerializeField] private float tableBorderOffset = 20f;
     [SerializeField] private float cardSpeed = 1f;
+    [SerializeField] private int maxCardsInRowCount = 2;
 
     private RectTransform _table;
     private Vector2 _tableCenter;
@@ -25,6 +26,10 @@ public class CardDeckBehaviour : MonoBehaviour
     private CardHand _cardHand;
     private Vector2 _cardSpawnPos;
     private float _spaceBetweenCards;
+    private int _cardsRndMax = 0;
+    private CardBehaviour[] _cardsRndRange;
+    private string _lastSpawnedCardName;
+    private int _cardsInRow = 0;
 
     private void Start()
     {
@@ -34,6 +39,23 @@ public class CardDeckBehaviour : MonoBehaviour
         
         GetTableParameters();
         _cardWidth = cardDeck[0].GetComponent<RectTransform>().rect.width;
+
+        foreach (var card in cardDeck)
+        {
+            _cardsRndMax += card.Frequency;
+        }
+
+        _cardsRndRange = new CardBehaviour[_cardsRndMax];
+        var k = 0;
+        foreach (var card in cardDeck)
+        {
+            var freq = card.Frequency;
+            for (int i = 0; i < freq; i++)
+            {
+                _cardsRndRange[k] = card;
+                k++;
+            }
+        }
     }
 
     private void GetTableParameters()
@@ -47,11 +69,25 @@ public class CardDeckBehaviour : MonoBehaviour
 
     public void SpawnCards()
     {
-        int rnd = 0;
+        var rnd = 0;
         for (int i = 0; i < cardsPerSpawn; i++)
         {
-            rnd = Random.Range(0, cardDeck.Length);
-            var card = Instantiate(cardDeck[rnd]);
+            var k = 0;
+            do
+            {
+                k++;
+                rnd = Random.Range(0, _cardsRndMax);
+                if (_cardsRndRange[rnd].building.BuildingName == _lastSpawnedCardName)
+                {
+                    _cardsInRow++;
+                }
+                else
+                {
+                    _cardsInRow = 1;
+                }
+            } while (_cardsInRow > maxCardsInRowCount & k < 20) ;
+
+            var card = Instantiate(_cardsRndRange[rnd]);
             var handIsFull = !_cardHand.Add(card);
             if (handIsFull)
             {
@@ -59,6 +95,7 @@ public class CardDeckBehaviour : MonoBehaviour
                 break;
             }
             SetCardParameters(card);
+            _lastSpawnedCardName = card.building.BuildingName;
         }
         CalculateSpaceBetweenCards();
         UpdateCardsPos();
