@@ -11,7 +11,7 @@ public class BuildingBehaviour : MonoBehaviour
     public StringInt[] GoldForBuildings => goldForBuildings;
     public bool UnderGhost { get; private set; } = false;
 
-    private SpriteRenderer _sprite;
+    private TextMesh _textMesh;
     private Transform _cameraTransform;
 
     public void OnDrawGizmos()
@@ -21,8 +21,8 @@ public class BuildingBehaviour : MonoBehaviour
 
     public void Initialize()
     {
-        _sprite = GetComponentInChildren<SpriteRenderer>();
-        _sprite.enabled = false;
+        _textMesh = GetComponentInChildren<TextMesh>();
+        _textMesh.text = "";
         GetComponentInChildren<BoxCollider>().enabled = false;
         _cameraTransform = FindObjectOfType<Camera>().transform;
     }
@@ -41,27 +41,29 @@ public class BuildingBehaviour : MonoBehaviour
 
     public void Highlight(bool b, string ghostType)
     {
-        var spriteTrans = _sprite.transform;
-        spriteTrans.LookAt(_cameraTransform);
-        spriteTrans.eulerAngles = RoundRotation(spriteTrans.eulerAngles);
+        var textTrans = _textMesh.transform;
+        textTrans.LookAt(_cameraTransform);
+        textTrans.Rotate(Vector3.up, 180);
+        textTrans.eulerAngles = RoundRotation(textTrans.eulerAngles);
         
-        var haveProfit = CheckGhostTypeInList(ghostType);
-        _sprite.enabled = b & haveProfit;
+        var profit = CheckGhostTypeInList(ghostType);
+        var hasProfit = profit != 0;
+        _textMesh.text = (b & hasProfit) ? profit.ToString() : "";
 
         UnderGhost = b;
     }
 
-    private bool CheckGhostTypeInList(string ghostType)
+    private int CheckGhostTypeInList(string ghostType)
     {
         foreach (var pair in goldForBuildings)
         {
             if (pair.key == ghostType)
             {
-                return true;
+                return pair.value;
             }
         }
 
-        return false;
+        return 0;
     }
 
     private Vector3 RoundRotation(Vector3 oldRot)

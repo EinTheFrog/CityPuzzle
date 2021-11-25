@@ -75,16 +75,11 @@ public class BuildingManagerBehaviour : MonoBehaviour
         CancelSoleSelection();
     }
 
-    public void ClearHand()
-    {
-        
-    }
-
     private void SpawnGhost(BuildingBehaviour building)
     {
         _ghost = Instantiate(building);
         _ghost.GetComponentInChildren<MeshRenderer>().enabled = false;
-        _ghost.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        _ghost.GetComponentInChildren<TextMesh>().text = "";
         _ghost.gameObject.SetActive(false);
     }
 
@@ -160,6 +155,11 @@ public class BuildingManagerBehaviour : MonoBehaviour
         if (gold > 0)
         {
             goldManager.EarnGold(gold);
+        }
+
+        if (gold < 0)
+        {
+            goldManager.SpendGold(Mathf.Abs(gold));
         }
     }
 
