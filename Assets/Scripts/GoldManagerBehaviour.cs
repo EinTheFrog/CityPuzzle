@@ -13,6 +13,8 @@ public class GoldManagerBehaviour : MonoBehaviour
     [SerializeField] private BuildingManagerBehaviour buildingManager = default;
     [SerializeField] private CardDeckBehaviour cardDeck = default;
 
+    public int Level { get; private set; } = 1;
+    
     private int _gold = 0;
     
     private void Start()
@@ -57,6 +59,7 @@ public class GoldManagerBehaviour : MonoBehaviour
         loadingScreen.enabled = true;
         buildingManager.DestroyAllBuildings();
         cardDeck.ClearHand();
+        Level++;
         btnNextLevel.enabled = false;
         loadingScreen.enabled = false;
     }
