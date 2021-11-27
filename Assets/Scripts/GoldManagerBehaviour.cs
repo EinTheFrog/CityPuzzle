@@ -12,14 +12,15 @@ public class GoldManagerBehaviour : MonoBehaviour
     [SerializeField] private Image loadingScreen = default;
     [SerializeField] private BuildingManagerBehaviour buildingManager = default;
     [SerializeField] private CardDeckBehaviour cardDeck = default;
+    [SerializeField] private Text levelText = default;
 
-    public int Level { get; private set; } = 1;
-    
     private int _gold = 0;
+    private int _level = 1;
     
     private void Start()
     {
         goldText.text = _gold.ToString();
+        levelText.text = _level.ToString();
         btnNextLevel.enabled = false;
         loadingScreen.enabled = false;
     }
@@ -50,6 +51,10 @@ public class GoldManagerBehaviour : MonoBehaviour
         {
             _gold = 0;
         }
+        if (_gold < goldForNextLevel)
+        {
+            btnNextLevel.enabled = false;
+        }
         goldText.text = _gold.ToString();
     }
 
@@ -57,10 +62,13 @@ public class GoldManagerBehaviour : MonoBehaviour
     {
         SpendGold(goldForNextLevel);
         loadingScreen.enabled = true;
+        
         buildingManager.DestroyAllBuildings();
         cardDeck.ClearHand();
-        Level++;
-        btnNextLevel.enabled = false;
+        
+        _level++;
+        levelText.text = _level.ToString();
+        
         loadingScreen.enabled = false;
     }
 }

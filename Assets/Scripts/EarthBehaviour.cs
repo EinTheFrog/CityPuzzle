@@ -12,8 +12,13 @@ public class EarthBehaviour : MonoBehaviour
         _anim = GetComponent<Animator>();
     }
 
-    public void RotateBy90()
+    public void RotateRight()
     {
-        _anim.Play("EarthRotation");
+        _anim.Play("EarthRightRotation");
+    }
+
+    public void RotateLeft()
+    {
+        _anim.Play("EarthLeftRotation");
     }
 }
