@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 7990420612038797896}
   - component: {fileID: 7606804501646974076}
   m_Layer: 0
-  m_Name: Barraks
+  m_Name: Barracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Barraks
+  buildingName: Barracks
   goldForBuildings: []
 --- !u!1 &7685251102743443738
 GameObject:

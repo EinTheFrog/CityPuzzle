@@ -28,7 +28,7 @@ public class CardDeckBehaviour : MonoBehaviour
     private float _spaceBetweenCards;
     private int _cardsRndMax = 0;
     private CardBehaviour[] _cardsRndRange;
-    private string _lastSpawnedCardName;
+    private BuildingType _lastSpawnedCardName;
     private int _cardsInRow = 0;
 
     private void Start()
@@ -77,7 +77,7 @@ public class CardDeckBehaviour : MonoBehaviour
             {
                 k++;
                 rnd = Random.Range(0, _cardsRndMax);
-                if (_cardsRndRange[rnd].building.BuildingName == _lastSpawnedCardName)
+                if (_cardsRndRange[rnd].building.BuildingType == _lastSpawnedCardName)
                 {
                     _cardsInRow++;
                 }
@@ -95,7 +95,7 @@ public class CardDeckBehaviour : MonoBehaviour
                 break;
             }
             SetCardParameters(card);
-            _lastSpawnedCardName = card.building.BuildingName;
+            _lastSpawnedCardName = card.building.BuildingType;
         }
         CalculateSpaceBetweenCards();
         UpdateCardsPos();

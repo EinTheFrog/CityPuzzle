@@ -345,9 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: House
+  buildingType: 3
   goldForBuildings:
-  - key: Church
+  - key: 1
     value: 10
-  - key: House
+  - key: 3
     value: 5

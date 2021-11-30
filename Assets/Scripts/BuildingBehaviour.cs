@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class BuildingBehaviour : MonoBehaviour
 {
-    [SerializeField] private string buildingName = default;
+    [SerializeField] private BuildingType buildingType = default;
     [SerializeField] private StringInt[] goldForBuildings = default;
 
-    public string BuildingName => buildingName;
+    public BuildingType BuildingType => buildingType;
     public StringInt[] GoldForBuildings => goldForBuildings;
     public bool UnderGhost { get; private set; } = false;
 
     private TextMesh _textMesh;
     private Transform _cameraTransform;
-
+    
     public void OnDrawGizmos()
     {
         AlignPosition();
@@ -39,7 +39,7 @@ public class BuildingBehaviour : MonoBehaviour
         transform.localPosition = localPosition;
     }
 
-    public void Highlight(bool b, string ghostType)
+    public void Highlight(bool b, BuildingType ghostType)
     {
         var textTrans = _textMesh.transform;
         textTrans.LookAt(_cameraTransform);
@@ -53,7 +53,7 @@ public class BuildingBehaviour : MonoBehaviour
         UnderGhost = b;
     }
 
-    private int CheckGhostTypeInList(string ghostType)
+    private int CheckGhostTypeInList(BuildingType ghostType)
     {
         foreach (var pair in goldForBuildings)
         {

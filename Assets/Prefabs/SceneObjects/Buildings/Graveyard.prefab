@@ -345,5 +345,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Graveyard
+  buildingType: 2
   goldForBuildings: []

@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using UnityEditor;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class BuildingManagerBehaviour : MonoBehaviour
@@ -14,6 +16,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
     public CardBehaviour Card { get; private set; }
 
     private static readonly Vector3 FarAway = Vector3.up * 100; //handpicked value
+    private static readonly string BuildingPrefabsPath = "Assets/SceneObjects/Buildings";
 
     private CardDeckBehaviour _cardDeckBehaviour;
     private Transform _buildingParentTransform;
@@ -64,7 +67,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
     {
         if (Card != null && Sole != null)
         {
-            var buildingWasBuilt = BuildBuilding(Card.building);
+            var buildingWasBuilt = BuildBuilding(Card.building, Sole);
             if (buildingWasBuilt)
             {
                 _cardDeckBehaviour.RemoveCardFromHand(Card);
@@ -114,7 +117,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
         }
     }
 
-    private bool BuildBuilding(BuildingBehaviour building)
+    private bool BuildBuilding(BuildingBehaviour building, SoleBehaviour sole)
     {
         if (Sole.IsOccupied) return false;
 
@@ -122,10 +125,54 @@ public class BuildingManagerBehaviour : MonoBehaviour
         
         var buildingInstance = Instantiate(building);
         buildingInstance.Initialize();
-        PutBuildingOnSole(buildingInstance.gameObject, Sole.gameObject);
-        Sole.Occupy(buildingInstance);
+        PutBuildingOnSole(buildingInstance.gameObject, sole.gameObject);
+        sole.Occupy(buildingInstance);
         _builtBuildings.Add(buildingInstance);
         return true;
+    }
+
+    public void LoadBuilding(BuildingType type, Vector2 pos)
+    {
+        BuildingBehaviour building = null;
+        switch (type)
+        {
+            case BuildingType.Barracks:
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                break;
+            case BuildingType.Church:
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                break;
+            case BuildingType.Graveyard:
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                break;
+            case BuildingType.House:
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                break;
+            case BuildingType.Smithy:
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                break;
+            case BuildingType.Well:
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                break;
+        }
+
+        var sole = FindSole(pos);
+        BuildBuilding(building, sole);
+    }
+
+    private SoleBehaviour FindSole(Vector2 pos)
+    {
+        foreach (var sole in _soles)
+        {
+            var solePos = sole.transform.position;
+            var soleCoords = new Vector2(solePos.x, solePos.z);
+            if (soleCoords.Equals(pos))
+            {
+                return sole;
+            }
+        }
+
+        throw new Exception("Couldn't find sole");
     }
 
     private void PutBuildingOnSole(GameObject building, GameObject sole)
@@ -148,7 +195,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
         {
             if (building.UnderGhost)
             {
-                gold += FindValueInSIArray(building.GoldForBuildings, earnBuilding.BuildingName);
+                gold += FindValueInSIArray(building.GoldForBuildings, earnBuilding.BuildingType);
             }
         }
 
@@ -162,7 +209,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
         }
     }
 
-    private int FindValueInSIArray(StringInt[] stringInts, string key)
+    private int FindValueInSIArray(StringInt[] stringInts, BuildingType key)
     {
         foreach (var pair in stringInts)
         {

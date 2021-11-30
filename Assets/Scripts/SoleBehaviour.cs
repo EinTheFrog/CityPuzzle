@@ -7,15 +7,14 @@ public class SoleBehaviour : MonoBehaviour
 
     public bool IsOccupied => _building != null;
     public bool UnderGhost { get; set; } = false;
-    
-    private const string EmptyGhostType = "EMPTY_GHOST_TYPE";
+    public BuildingBehaviour Building => _building;
     
     private Material _material = default;
     private Color _basicColor = default;
     private BuildingManagerBehaviour _buildingManager = default;
     private bool _underMouse = false;
-    private BuildingBehaviour _building;
-    private string _ghostType = EmptyGhostType;
+    private BuildingBehaviour _building = null;
+    private BuildingType _ghostType = BuildingType.EMPTY;
     private void Start()
     {
         _material = gameObject.GetComponent<Renderer>().material;
@@ -53,7 +52,7 @@ public class SoleBehaviour : MonoBehaviour
     {
         if (IsOccupied)
         {
-            _building.Highlight(false, EmptyGhostType);
+            _building.Highlight(false, BuildingType.EMPTY);
         }
         _material.color = _basicColor;
     }
@@ -90,14 +89,14 @@ public class SoleBehaviour : MonoBehaviour
         var building = other.GetComponentInParent<BuildingBehaviour>();
         if (building == null) return;
         UnderGhost = true;
-        _ghostType = building.BuildingName;
+        _ghostType = building.BuildingType;
         Highlight();
     }
 
     private void OnTriggerExit(Collider other)
     {
         UnderGhost = false;
-        _ghostType = EmptyGhostType;
+        _ghostType = BuildingType.EMPTY;
         RestoreColor();
     }
 }

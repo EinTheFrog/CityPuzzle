@@ -345,9 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Smithy
+  buildingType: 4
   goldForBuildings:
-  - key: Barraks
+  - key: 0
     value: 10
-  - key: Church
+  - key: 1
     value: -5

@@ -264,11 +264,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Church
+  buildingType: 1
   goldForBuildings:
-  - key: Graveyard
+  - key: 2
     value: 15
-  - key: Barraks
+  - key: 0
     value: -5
 --- !u!1 &9196685331407086350
 GameObject:

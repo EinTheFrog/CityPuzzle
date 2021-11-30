@@ -345,11 +345,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6782ba63ac02546824087747d6bfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Well
+  buildingType: 5
   goldForBuildings:
-  - key: House
+  - key: 3
     value: 5
-  - key: Smithy
+  - key: 4
     value: 5
-  - key: Graveyard
+  - key: 2
     value: -5

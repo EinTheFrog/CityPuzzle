@@ -3,6 +3,6 @@
 [Serializable]
 public class StringInt
 {
-    public string key;
+    public BuildingType key;
     public int value;
 }
