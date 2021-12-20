@@ -16,6 +16,9 @@ public class GoldManagerBehaviour : MonoBehaviour
 
     private int _gold = 0;
     private int _level = 1;
+
+    public int Level => _level;
+    public int Gold => _gold;
     
     private void Start()
     {
@@ -70,5 +73,13 @@ public class GoldManagerBehaviour : MonoBehaviour
         levelText.text = _level.ToString();
         
         loadingScreen.enabled = false;
+    }
+
+    public void LoadData(int level, int gold)
+    {
+        _level = level;
+        levelText.text = _level.ToString();
+        _gold = gold;
+        goldText.text = _gold.ToString();
     }
 }

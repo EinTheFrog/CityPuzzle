@@ -5,11 +5,11 @@ using UnityEngine;
 public class BuildingData
 {
     public BuildingType type;
-    public Vector2 pos;
+    public int soleId;
 
-    public BuildingData(BuildingType type, Vector2 pos)
+    public BuildingData(BuildingType type, Vector2 pos, int soleId)
     {
         this.type = type;
-        this.pos = pos;
+        this.soleId = soleId;
     }
 }

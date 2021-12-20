@@ -9,6 +9,8 @@ public class SoleBehaviour : MonoBehaviour
     public bool UnderGhost { get; set; } = false;
     public BuildingBehaviour Building => _building;
     
+    public int Id { get; private set; }
+    
     private Material _material = default;
     private Color _basicColor = default;
     private BuildingManagerBehaviour _buildingManager = default;
@@ -20,6 +22,8 @@ public class SoleBehaviour : MonoBehaviour
         _material = gameObject.GetComponent<Renderer>().material;
         _basicColor = _material.color;
         _buildingManager = FindObjectOfType<BuildingManagerBehaviour>();
+        var pos = transform.localPosition;
+        Id = ((int)pos.x) * 10 + (int)pos.z;
     }
 
     private void OnMouseEnter()

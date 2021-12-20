@@ -14,9 +14,11 @@ public class BuildingManagerBehaviour : MonoBehaviour
     [SerializeField] private GoldManagerBehaviour goldManager = default;
     public SoleBehaviour Sole { get; private set; }
     public CardBehaviour Card { get; private set; }
+    public SoleBehaviour[] Soles => _soles;
+    public int BuildingsLength => _builtBuildings.Count;
 
     private static readonly Vector3 FarAway = Vector3.up * 100; //handpicked value
-    private static readonly string BuildingPrefabsPath = "Assets/SceneObjects/Buildings";
+    private static readonly string BuildingPrefabsPath = "Assets/Prefabs/SceneObjects/Buildings";
 
     private CardDeckBehaviour _cardDeckBehaviour;
     private Transform _buildingParentTransform;
@@ -119,7 +121,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
 
     private bool BuildBuilding(BuildingBehaviour building, SoleBehaviour sole)
     {
-        if (Sole.IsOccupied) return false;
+        if (sole.IsOccupied) return false;
 
         EarnGoldForBuilding(building);
         
@@ -131,42 +133,40 @@ public class BuildingManagerBehaviour : MonoBehaviour
         return true;
     }
 
-    public void LoadBuilding(BuildingType type, Vector2 pos)
+    public void LoadBuilding(BuildingType type, int soleId)
     {
         BuildingBehaviour building = null;
         switch (type)
         {
             case BuildingType.Barracks:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks.prefab");
                 break;
             case BuildingType.Church:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Church.prefab");
                 break;
             case BuildingType.Graveyard:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Graveyard.prefab");
                 break;
             case BuildingType.House:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/House.prefab");
                 break;
             case BuildingType.Smithy:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Smithy.prefab");
                 break;
             case BuildingType.Well:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks");
+                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Well.prefab");
                 break;
         }
-
-        var sole = FindSole(pos);
+        
+        var sole = FindSole(soleId);
         BuildBuilding(building, sole);
     }
 
-    private SoleBehaviour FindSole(Vector2 pos)
+    private SoleBehaviour FindSole(int id)
     {
         foreach (var sole in _soles)
         {
-            var solePos = sole.transform.position;
-            var soleCoords = new Vector2(solePos.x, solePos.z);
-            if (soleCoords.Equals(pos))
+            if (sole.Id == id)
             {
                 return sole;
             }
@@ -235,8 +235,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
     
     private void FreeSoles()
     {
-        var soles = GetComponentsInChildren<SoleBehaviour>();
-        foreach (var sole in soles)
+        foreach (var sole in _soles)
         {
             sole.Free();
         }
