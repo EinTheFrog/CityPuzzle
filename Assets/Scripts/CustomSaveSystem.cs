@@ -8,9 +8,10 @@ public class CustomSaveSystem : MonoBehaviour
 {
     [SerializeField] private GoldManagerBehaviour goldManagerBehaviour = default;
     [SerializeField] private BuildingManagerBehaviour buildingManagerBehaviour = default;
+    [SerializeField] private CardDeckBehaviour cardDeckBehaviour = default;
     
     private const string FileName = "/SavedGame.dat";
-    private const int Version = 1;
+    private const int Version = 2;
 
     public void SaveGame()
     {
@@ -21,7 +22,8 @@ public class CustomSaveSystem : MonoBehaviour
             goldManagerBehaviour.Level, 
             goldManagerBehaviour.Gold, 
             buildingManagerBehaviour.Soles,
-            buildingManagerBehaviour.BuildingsLength
+            buildingManagerBehaviour.BuildingsLength,
+            cardDeckBehaviour.GetCardsInHand()
             );
         bf.Serialize(file, data);
         file.Close();
@@ -57,6 +59,17 @@ public class CustomSaveSystem : MonoBehaviour
                 {
                     buildingManagerBehaviour.LoadBuilding(buildingData.type, buildingData.soleId);
                 }
+                break;
+            }
+            case 2:
+            {
+                goldManagerBehaviour.LoadData(data.level, data.gold);
+                buildingManagerBehaviour.DestroyAllBuildings();
+                foreach (var buildingData in data.buildingsData)
+                {
+                    buildingManagerBehaviour.LoadBuilding(buildingData.type, buildingData.soleId);
+                }
+                cardDeckBehaviour.LoadCards(data.cardTypes);
                 break;
             }
         }

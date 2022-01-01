@@ -7182,6 +7182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goldManagerBehaviour: {fileID: 583717987}
   buildingManagerBehaviour: {fileID: 1398564505}
+  cardDeckBehaviour: {fileID: 1129020598}
 --- !u!4 &1731465139
 Transform:
   m_ObjectHideFlags: 0

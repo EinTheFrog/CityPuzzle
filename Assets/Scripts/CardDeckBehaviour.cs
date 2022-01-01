@@ -101,6 +101,26 @@ public class CardDeckBehaviour : MonoBehaviour
         UpdateCardsPos();
     }
 
+    public void LoadCards(int[] cardTypes)
+    {
+        ClearHand();
+        foreach (var type in cardTypes)
+        {
+            if (type == GameData.NoCardConst) continue;
+            var card = Instantiate(cardDeck[type]);
+            var handIsFull = !_cardHand.Add(card);
+            if (handIsFull)
+            {
+                Destroy(card.gameObject);
+                break;
+            }
+            SetCardParameters(card);
+            _lastSpawnedCardName = card.building.BuildingType;
+        }
+        CalculateSpaceBetweenCards();
+        UpdateCardsPos();
+    }
+
     private void SetCardParameters(CardBehaviour card)
     {
         card.GetDragDest = GetCardDragDest;
@@ -166,6 +186,11 @@ public class CardDeckBehaviour : MonoBehaviour
         var space = _spaceBetweenCards * _cardWidth;
         var res = _tableCenter + Vector2.right * (deckPos - centerOffset) * space;
         return res;
+    }
+
+    public CardBehaviour[] GetCardsInHand()
+    {
+        return _cardHand.cards;
     }
         
 }

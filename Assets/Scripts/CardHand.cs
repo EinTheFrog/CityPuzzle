@@ -2,19 +2,19 @@
 
 public class CardHand
 {
-    private CardBehaviour[] _cards;
+    public CardBehaviour[] cards;
 
     public int CurrentSize { private set; get; }
 
     public CardHand(int size)
     {
-        _cards = new CardBehaviour[size];
+        cards = new CardBehaviour[size];
     }
 
     public bool Add(CardBehaviour newCard)
     {
-        if (CurrentSize == _cards.Length) return false;
-        _cards[CurrentSize] = newCard;
+        if (CurrentSize == cards.Length) return false;
+        cards[CurrentSize] = newCard;
         CurrentSize++;
         return true;
     }
@@ -22,11 +22,11 @@ public class CardHand
     public void Remove(CardBehaviour card)
     {
         var cardPos = GetCardPos(card);
-        for (int i = cardPos + 1; i < _cards.Length; i++)
+        for (int i = cardPos + 1; i < cards.Length; i++)
         {
-            _cards[i - 1] = _cards[i];
+            cards[i - 1] = cards[i];
         }
-        _cards[_cards.Length - 1] = null;
+        cards[cards.Length - 1] = null;
         
         CurrentSize--;
     }
@@ -34,11 +34,11 @@ public class CardHand
     private int GetCardPos(CardBehaviour card)
     {
         var cardPos = -1;
-        for (int i = 0; i < _cards.Length; i++)
+        for (int i = 0; i < cards.Length; i++)
         {
-            if (_cards[i] == card)
+            if (cards[i] == card)
             {
-                _cards[i] = null;
+                cards[i] = null;
                 cardPos = i;
                 break;
             }
@@ -54,14 +54,14 @@ public class CardHand
 
     public CardBehaviour Get(int pos)
     {
-        return _cards[pos];
+        return cards[pos];
     }
 
     public void Clear()
     {
-        for (int i = 0; i < _cards.Length; i++)
+        for (int i = 0; i < cards.Length; i++)
         {
-            _cards[i] = null;
+            cards[i] = null;
         }
 
         CurrentSize = 0;
