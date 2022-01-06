@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -18,7 +18,7 @@ public class BuildingManagerBehaviour : MonoBehaviour
     public int BuildingsLength => _builtBuildings.Count;
 
     private static readonly Vector3 FarAway = Vector3.up * 100; //handpicked value
-    private static readonly string BuildingPrefabsPath = "Assets/Prefabs/SceneObjects/Buildings";
+    private const string BuildingPrefabsPath = "Assets/Prefabs/SceneObjects/Buildings";
 
     private CardDeckBehaviour _cardDeckBehaviour;
     private Transform _buildingParentTransform;
@@ -133,31 +133,34 @@ public class BuildingManagerBehaviour : MonoBehaviour
         return true;
     }
 
-    public void LoadBuilding(BuildingType type, int soleId)
+    public async void LoadBuilding(BuildingType type, int soleId)
     {
-        BuildingBehaviour building = null;
+        string buildingPath = "";
         switch (type)
         {
             case BuildingType.Barracks:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Barracks.prefab");
+                buildingPath = BuildingPrefabsPath + "/Barracks.prefab";
                 break;
             case BuildingType.Church:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Church.prefab");
+                buildingPath = BuildingPrefabsPath + "/Church.prefab";
                 break;
             case BuildingType.Graveyard:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Graveyard.prefab");
+                buildingPath = BuildingPrefabsPath + "/Graveyard.prefab";
                 break;
             case BuildingType.House:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/House.prefab");
+                buildingPath = BuildingPrefabsPath + "/House.prefab";
                 break;
             case BuildingType.Smithy:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Smithy.prefab");
+                buildingPath = BuildingPrefabsPath + "/Smithy.prefab";
                 break;
             case BuildingType.Well:
-                building = AssetDatabase.LoadAssetAtPath<BuildingBehaviour>(BuildingPrefabsPath + "/Well.prefab");
+                buildingPath = BuildingPrefabsPath + "/Well.prefab";
                 break;
         }
-        
+
+        var op = Addressables.LoadAssetAsync<BuildingBehaviour>(buildingPath);
+        var task = await op.Task;
+        var building = op.Result;
         var sole = FindSole(soleId);
         BuildBuilding(building, sole);
     }
