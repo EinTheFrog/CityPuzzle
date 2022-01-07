@@ -16,7 +16,13 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 53fb159ea4d7976429d72de34fb1b016
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 66d2847adc6d792469bb42864f47a365
+    m_Address: Assets/Prefabs/SceneObjects/Buildings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2d8b463435b0d3e4a9fef25ae1e113fa, type: 2}
   m_SchemaSet:

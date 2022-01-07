@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Table
   - BuildingParent
+  - FreeSpace
+  - Canvas
+  - CardsParent
   layers:
   - Default
   - TransparentFX

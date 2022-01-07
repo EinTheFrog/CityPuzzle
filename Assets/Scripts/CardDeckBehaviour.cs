@@ -11,6 +11,8 @@ using Vector3 = UnityEngine.Vector3;
 public class CardDeckBehaviour : MonoBehaviour
 {
     [SerializeField] private string tableTag = "Table";
+    [SerializeField] private string freeSpaceTag = "FreeSpace";
+    [SerializeField] private string cardsParent = "CardsParent";
     [SerializeField] private CardBehaviour[] cardDeck;
     [SerializeField] private int cardsPerSpawn = 2;
     [SerializeField] private int handSize = 6;
@@ -30,6 +32,9 @@ public class CardDeckBehaviour : MonoBehaviour
     private CardBehaviour[] _cardsRndRange;
     private BuildingType _lastSpawnedCardName;
     private int _cardsInRow = 0;
+    private RectTransform _freeSpace;
+    private Vector2 _screenCenter;
+    private GameObject _cardsParent;
 
     private void Start()
     {
@@ -37,9 +42,11 @@ public class CardDeckBehaviour : MonoBehaviour
         
         _cardHand = new CardHand(handSize);
         
-        GetTableParameters();
+        Invoke(nameof(GetTableParameters), 0.01f);
         _cardWidth = cardDeck[0].GetComponent<RectTransform>().rect.width;
-
+        Invoke(nameof(GetScreenCenter), 0.015f);
+        _cardsParent = GameObject.FindGameObjectWithTag(cardsParent);
+        
         foreach (var card in cardDeck)
         {
             _cardsRndMax += card.Frequency;
@@ -62,13 +69,21 @@ public class CardDeckBehaviour : MonoBehaviour
     {
         _table = GameObject.FindGameObjectWithTag(tableTag).GetComponent<RectTransform>();
         var tableRect = _table.rect;
-        _tableCenter = tableRect.center;
+        _tableCenter = _table.localPosition;
+        _tableCenter += tableRect.center;
         _tableWidth = tableRect.width;
-        _cardSpawnPos = new Vector3(tableRect.xMax + 100, _tableCenter.y, 0);
+        _cardSpawnPos = new Vector2(tableRect.xMax + 100, _tableCenter.y);
+    }
+
+    private void GetScreenCenter()
+    {
+        _freeSpace = GameObject.FindGameObjectWithTag(freeSpaceTag).GetComponent<RectTransform>();
+        _screenCenter = _freeSpace.rect.center;
     }
 
     public void SpawnCards()
     {
+        UnZoomAllCards();
         var rnd = 0;
         for (int i = 0; i < cardsPerSpawn; i++)
         {
@@ -123,10 +138,12 @@ public class CardDeckBehaviour : MonoBehaviour
 
     private void SetCardParameters(CardBehaviour card)
     {
-        card.GetDragDest = GetCardDragDest;
+        card.GetTableDest = GetCardDragDest;
+        card.GetZoomDest = GetCardZoomDest;
+        card.UnZoomAllCards = UnZoomAllCards;
         card.Speed = cardSpeed;
         var cardTransform = card.transform;
-        cardTransform.SetParent(_table);
+        cardTransform.SetParent(_cardsParent.transform);
         cardTransform.localPosition = _cardSpawnPos;
     }
 
@@ -174,11 +191,14 @@ public class CardDeckBehaviour : MonoBehaviour
         {
             if (card != _cardHand.Get(i)) continue;
             var dest = CalculateCardDest(i);
+            card.transform.SetSiblingIndex(i);
             return dest;
         }
 
         throw new Exception("Can't find such card");
     }
+
+    private Vector2 GetCardZoomDest(CardBehaviour card) => _screenCenter;
 
     private Vector2 CalculateCardDest(int deckPos)
     {
@@ -192,5 +212,14 @@ public class CardDeckBehaviour : MonoBehaviour
     {
         return _cardHand.cards;
     }
-        
+
+    private void UnZoomAllCards()
+    {
+        for (int i = 0; i < handSize; i++)
+        {
+            var card = _cardHand.Get(i);
+            if (card == null) break;
+            card.Zoom(false);
+        }
+    }
 }
